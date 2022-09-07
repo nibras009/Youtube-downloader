@@ -2,7 +2,7 @@
  
  Run using:
  
- ``` pythone main.py ```
+ ``` python main.py ```
  
  Don't forget to install pytube & moviepy using : 
  

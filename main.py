@@ -21,6 +21,9 @@ screen = Tk()
 title = screen.title('YouTube Downloader 2.0')
 canvas = Canvas(screen, width=600, height=600)
 canvas.pack()
+
+
+
 #test
 def download__file_mp3():
     if messagebox.askokcancel(title="Remember!!", message="You can't Download the same Audio in the Same Repertory, Check it Before The Downloading always. ") == True:
@@ -60,8 +63,12 @@ def download__file():
         pass    
     if messagebox.askokcancel(title="Download?", message="Press Ok to start The Downloading or Cancel to return") ==True:
         screen.title("Downloading , please wait a moment ..... ")
-        mp4__video = YouTube(get__link).streams.get_highest_resolution().download()
-        vid__clip =  VideoFileClip(mp4__video)
+        screen1 = Tk()
+        title1 = screen1.title("Download, Please Wait a Moment .....")
+        canvas = Canvas(screen, width=600, height=600)
+        canvas.pack()
+        mp4__video = YouTube(screen1,get__link).streams.get_highest_resolution().download()
+        vid__clip =  VideoFileClip(screen1,mp4__video)
         vid__clip.close()
         shutil.move(mp4__video, user__path)
         messagebox.showinfo(title="Downlaod Complete!", message="Thanks for using our Downloader")
@@ -95,10 +102,10 @@ def download_playlist():
             pass
 
 # image logo
-logo__img = PhotoImage(file='Youtube logo.png')
+logo__img = PhotoImage(file='Youtube-downloader/Photo Files/Youtube logo.png')
 canvas.create_image(300, 100, image= logo__img)
 # image logo 2
-image_img_2 = PhotoImage(file="youtube logo 2.png")
+image_img_2 = PhotoImage(file="Youtube-downloader/Photo Files/youtube logo 2.png")
 canvas.create_image(300,500, image=image_img_2)
 
 # link field
