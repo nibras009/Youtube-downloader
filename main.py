@@ -1,132 +1,146 @@
-from asyncio import streams
 import os
-from pytube import YouTube
-import tkinter
-from tkinter import *
-from tkinter import filedialog
-from tkinter.tix import Select
-from webbrowser import get
-from moviepy import *
-from os import path
-from pytube import *
-import shutil
-from moviepy.editor import *
-from tkinter import messagebox
-import pytube
-import moviepy.editor
-from tkinter.filedialog import *
-from pytube import Playlist
+import tkinter as tk
+from tkinter import filedialog, messagebox
+from PIL import Image, ImageTk
+import yt_dlp as ytdlp
 
-screen = Tk()
-title = screen.title('YouTube Downloader 2.0')
-canvas = Canvas(screen, width=600, height=600)
+# Initialize Tkinter window
+screen = tk.Tk()
+screen.title('YouTube Downloader 2.0, nibras09')
+canvas = tk.Canvas(screen, width=600, height=360)
 canvas.pack()
 
+def download_file_mp3():
+    if messagebox.askokcancel(title="Remember!!", message="You can't download the same mp3 file in the same directory, check before the download begins."):
 
+        if messagebox.askokcancel(title="Are you sure?", message="Are you sure you pasted the mp3 file link in the entry? If not, press Cancel."):
 
-#test
-def download__file_mp3():
-    if messagebox.askokcancel(title="Remember!!", message="You can't Download the same Audio in the Same Repertory, Check it Before The Downloading always. ") == True:
-            messagebox.askokcancel(title="Are you sure ?" ,message="Are you sure you pasted the Audio link in the entry, if not press Cancel , Because if you don't do the Downloader freeze and The Audio  don't Downlaod ")
             path = filedialog.askdirectory()
             path_label.config(text=path)
-            get__link = link__field.get()
-            user__path = path_label.cget("text")
-            
-    else:
-        pass    
-    if messagebox.askokcancel(title="Download?", message="Press Ok to start The Downloading or Cancel to return") ==True:
-            screen.title("Downloading , please wait a moment ..... ")
-            mp3 = YouTube(get__link)
-            mp3.streams.get_audio_only().download()            
-            vid_clip = VideoFileClip(mp3)
-            screen.title("YouTube Downloader 2.0")
-            vid_clip.close
-            shutil.move(mp3, user__path)
-            screen.title("YouTube Downloader 2.0")
-            messagebox.showinfo(title="Downlaod Complete!", message="Thanks for using our Downloader")
-            messagebox.showinfo(title="Go!", message="Go to The Repertory where is The Audio Downloaded to make you sure is The video Downloaded ")        
-            
-    else:
-            pass
-    
-  
+            get_link = link__field.get()
 
-def download__file():
-    if messagebox.askokcancel(title="Remember!!", message="You can't Download the same Video in the Same Repertory, Check it Before The Downloading always. ") == True:
-        messagebox.askokcancel(title="Are you sure ?" ,message="Are you sure you pasted the Video link in the entry, if not press Cancel , Because if you don't do the Downloader freeze and The file  don't Downlaod ")
-        path = filedialog.askdirectory()
-        path_label.config(text=path)
-        get__link = link__field.get()
-        user__path = path_label.cget("text")
-    else:
-        pass    
-    if messagebox.askokcancel(title="Download?", message="Press Ok to start The Downloading or Cancel to return") ==True:
-        screen.title("Downloading , please wait a moment ..... ")
-        screen1 = Tk()
-        title1 = screen1.title("Download, Please Wait a Moment .....")
-        canvas = Canvas(screen, width=600, height=600)
-        canvas.pack()
-        mp4__video = YouTube(screen1,get__link).streams.get_highest_resolution().download()
-        vid__clip =  VideoFileClip(screen1,mp4__video)
-        vid__clip.close()
-        shutil.move(mp4__video, user__path)
-        messagebox.showinfo(title="Downlaod Complete!", message="Thanks for using our Downloader")
-        messagebox.showinfo(title="Go!", message="Go to The Repertory where is The Video Downloaded to make you sure is The video Downloaded ")
-        screen.title("YouTube Downloader 2.0")
-    else:
-        pass
+            if not get_link:
+                messagebox.showerror(title="Error", message="No link provided.")
+                return
+
+            screen.title("Downloading, please wait a moment...")
+
+            ydl_opts = {
+                'format': 'bestaudio/best',
+                'outtmpl': f'{path}/%(title)s.%(ext)s',
+                'postprocessors': [{
+                    'key': 'FFmpegExtractAudio',
+                    'preferredcodec': 'mp3',
+                    'preferredquality': '192',
+                }],
+            }
+
+            try:
+                with ytdlp.YoutubeDL(ydl_opts) as ydl:
+                    ydl.download([get_link])
+                messagebox.showinfo(title="Download Complete!", message="Thanks for using our program.")
+                messagebox.showinfo(title="Go!", message="Go to the directory where the audio was downloaded to verify the file.")
+            except Exception as e:
+                messagebox.showerror(title="Download Error", message=f"An error occurred: {e}")
+
+            screen.title("YouTube Downloader 2.0")
+
+def download_file():
+    if messagebox.askokcancel(title="Remember!!", message="You can't download the same video in the same directory. Check it before downloading."):
+
+        if messagebox.askokcancel(title="Are you sure?", message="Are you sure you pasted the video link in the entry? If not, press Cancel."):
+
+            path = filedialog.askdirectory()
+            path_label.config(text=path)
+            get_link = link__field.get()
+
+            if not get_link:
+                messagebox.showerror(title="Error", message="No link provided.")
+                return
+
+            screen.title("Downloading, please wait a moment...")
+
+            ydl_opts = {
+                'format': 'bestvideo+bestaudio/best',
+                'outtmpl': f'{path}/%(title)s.%(ext)s',
+            }
+
+            try:
+                with ytdlp.YoutubeDL(ydl_opts) as ydl:
+                    ydl.download([get_link])
+                messagebox.showinfo(title="Download Complete!", message="Thanks for using our Downloader.")
+                messagebox.showinfo(title="Go!", message="Go to the directory where the video was downloaded to verify the file.")
+            except Exception as e:
+                messagebox.showerror(title="Download Error", message=f"An error occurred: {e}")
+
+            screen.title("YouTube Downloader 2.0")
 
 def download_playlist():
-        if messagebox.askokcancel(title="Remember!!", message="You can't Download the same Video in the Same Repertory, Check it Before The Downloading always. ") == True:
-            messagebox.askokcancel(title="Are you sure ?" ,message="Are you sure you pasted the Video link in the entry, if not press Cancel , Because if you don't do the Downloader freeze and The file  don't Downlaod ")
+    if messagebox.askokcancel(title="Remember!!", message="You can't download the same video in the same directory. Check it before downloading."):
+
+        if messagebox.askokcancel(title="Are you sure?", message="Are you sure you pasted the playlist link in the entry? If not, press Cancel."):
+
             path = filedialog.askdirectory()
             path_label.config(text=path)
-            get__link = link__field.get()
-            user__path = path_label.cget("text")
-        else:
-            pass    
-        if messagebox.askokcancel(title="Download?", message="Press Ok to start The Downloading or Cancel to return") ==True:
-            screen.title("Downloading , please wait a moment ..... ")
-            yt_playlist = Playlist(get__link)
-            for video in yt_playlist.videos:
-                video.streams.get_highest_resolution().download(user__path)
-            vid__clip= VideoFileClip(yt_playlist)
-            screen.title("YouTube Downloader 2.0")       
-            vid__clip.close()
-            shutil.move(yt_playlist, user__path)
-            messagebox.showinfo(title="Downlaod Complete!", message="Thanks for using our Downloader")
-            messagebox.showinfo(title="Go!", message="Go to The Repertory where is The Video Downloaded to make you sure is The video Downloaded ")
-            
-        else:
-            pass
+            get_link = link__field.get()
 
-# image logo
-logo__img = PhotoImage(file='Youtube-downloader/Photo Files/Youtube logo.png')
-canvas.create_image(300, 100, image= logo__img)
-# image logo 2
-image_img_2 = PhotoImage(file="Youtube-downloader/Photo Files/youtube logo 2.png")
-canvas.create_image(300,500, image=image_img_2)
+            if not get_link:
+                messagebox.showerror(title="Error", message="No link provided.")
+                return
 
-# link field
-link__field = Entry(screen,width=60)
-canvas.create_window(300, 230, window=link__field)
-#ctrl v label
-Ctrl__v = Label(screen, text="Select The Link Entry and Press Ctrl+V to past The Link on ")
-canvas.create_window(300,210, window=Ctrl__v)
-# download btn
-download__btn = Button(screen,bg="green" ,text="Download Video ", command=download__file)
-canvas.create_window(300, 360, window=download__btn)
-#link Label
-link__label = Label(screen, text="Enter A Video link To download the Video", font=("Arial",15))
-canvas.create_window(300, 170, window= link__label)
-# download btn_mp3
-download__btn_mp3 = Button(screen,bg="red" ,text="Download MP3 ", command=download__file_mp3)
-canvas.create_window(300, 310, window=download__btn_mp3)
-#playlist button
-play_list = Button(screen, bg="yellow", text="Download Playlist", command=download_playlist)
-canvas.create_window(300, 400, window=play_list)
-#path label
-path_label = Label(screen,text="And Press Download and choose a Repertory For the Download ", font=("Arial", 15))
-canvas.create_window(300,280, window=path_label)
+            screen.title("Downloading, please wait a moment...")
+
+            ydl_opts = {
+                'format': 'bestvideo+bestaudio/best',
+                'outtmpl': f'{path}/%(playlist_title)s/%(title)s.%(ext)s',
+                'noplaylist': False,  # Ensure playlist mode is enabled
+            }
+
+            try:
+                with ytdlp.YoutubeDL(ydl_opts) as ydl:
+                    ydl.download([get_link])
+                messagebox.showinfo(title="Download Complete!", message="Thanks for using our Downloader.")
+                messagebox.showinfo(title="Go!", message="Go to the directory where the videos were downloaded to verify the files.")
+            except Exception as e:
+                messagebox.showerror(title="Download Error", message=f"An error occurred: {e}")
+
+# Load the image
+image_path2 = os.path.join(os.path.dirname(__file__), 'youtube logo 2.png')
+try:
+    pil_image2 = Image.open(image_path2)
+    image2 = ImageTk.PhotoImage(pil_image2)
+    label2 = tk.Label(screen, image=image2)
+    label2.place(x=300, y=300)
+    label2.pack()
+except Exception as e:
+    print(f"Error loading image2: {e}")
+
+# Link field
+link__field = tk.Entry(screen, width=60)
+canvas.create_window(300, 200, window=link__field)
+
+# Ctrl+V label
+Ctrl__v = tk.Label(screen, text="Select The Link Entry and Press Ctrl+V to paste the link.")
+canvas.create_window(300, 140, window=Ctrl__v)
+
+# Download Video button
+download__btn = tk.Button(screen, bg="green", text="Download Video", command=download_file)
+canvas.create_window(300, 290, window=download__btn)
+
+# Link Label
+link__label = tk.Label(screen, text="Enter a Video link to download the video", font=("Arial", 15))
+canvas.create_window(300, 100, window=link__label)
+
+# Download MP3 button
+download__btn_mp3 = tk.Button(screen, bg="red", text="Download MP3", command=download_file_mp3)
+canvas.create_window(300, 240, window=download__btn_mp3)
+
+# Playlist button
+play_list = tk.Button(screen, bg="yellow", text="Download Playlist", command=download_playlist)
+canvas.create_window(300, 330, window=play_list)
+
+# Path Label
+path_label = tk.Label(screen, text="Press Download and choose a directory for the download", font=("Arial", 15))
+canvas.create_window(300, 180, window=path_label)
+
 screen.mainloop()

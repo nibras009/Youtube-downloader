@@ -1,3 +1,3 @@
 @echo off
-pip install moviepy pytube
+pip install yt_dlp Pillow
 pause
