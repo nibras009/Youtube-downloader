@@ -3,11 +3,11 @@
  
   ```https://www.python.org/```
 
-1. Install yt_dlp using -as an administrator- : 
+1. Install yt_dlp using : (as an administrator)  
  
  ```Install-dep.bat```
 
-2. Install ffmpeg using -as an administrator- :
+2. Install ffmpeg using: (as an administrator)
  
  ```install_ffmpeg.bat```
 
