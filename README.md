@@ -3,13 +3,13 @@
  
   ```https://www.python.org/```
 
-1. Install yt_dlp using : 
+1. Install yt_dlp using -as an administrator- : 
  
  ```Install-dep.bat```
 
 2. Install ffmpeg using -as an administrator- :
  
- ```install_ffmpeg```
+ ```install_ffmpeg.bat```
 
 3. Open the files explorer and navigate to the Youtube-downloader folder and copy its full path then open the command prompt and use this command :
 
@@ -17,6 +17,6 @@
 
 4. after that just run the program using this command :
 
-   ```python main.py ```
+ ```python main.py ```
  
 
