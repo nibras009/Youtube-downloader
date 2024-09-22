@@ -1,3 +1,3 @@
 @echo off
-pip install yt_dlp Pillow
+pip install yt_dlp Pillow 
 pause
